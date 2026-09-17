@@ -3,6 +3,7 @@ import re
 import sys
 import threading
 import subprocess
+import platform
 import tkinter as tk
 from tkinter import messagebox, scrolledtext
 from ytmusicapi import YTMusic
@@ -17,10 +18,10 @@ class YTMusicDownloaderApp:
     def __init__(self, root):
         self.root = root
         self.root.title("YT Music Downloader")
-        self.root.geometry("650x480")
+        self.root.geometry("680x480")
         self.root.minsize(500, 400)
 
-        # --- Top Frame: Input & Button ---
+        # --- Top Frame: Input & Buttons ---
         input_frame = tk.Frame(root, padx=10, pady=10)
         input_frame.pack(fill=tk.X)
 
@@ -28,6 +29,17 @@ class YTMusicDownloaderApp:
         
         self.url_entry = tk.Entry(input_frame, font=("Arial", 12))
         self.url_entry.pack(fill=tk.X, side=tk.LEFT, expand=True, padx=(0, 10))
+
+        # Open Folder Button (Matches Start button style: Green bg, Black text)
+        self.folder_btn = tk.Button(
+            input_frame, 
+            text="Open Folder", 
+            bg="#4CAF50", 
+            fg="black", 
+            font=("Arial", 11, "bold"), 
+            command=self.open_download_folder
+        )
+        self.folder_btn.pack(side=tk.RIGHT, padx=(0, 5))
 
         # Start button with black text on green background
         self.start_btn = tk.Button(
@@ -54,6 +66,27 @@ class YTMusicDownloaderApp:
         """Helper to safely write text to the GUI log window."""
         self.log_area.insert(tk.END, message + "\n")
         self.log_area.see(tk.END)
+
+    def open_download_folder(self):
+        """Opens the DownloadedMusic folder using the OS's native file explorer with an inversion click effect."""
+        self.folder_btn.config(bg="black", fg="#4CAF50")
+        self.root.after(150, lambda: self.folder_btn.config(bg="#4CAF50", fg="black"))
+
+        base_dir = os.path.abspath("DownloadedMusic")
+        os.makedirs(base_dir, exist_ok=True)
+
+        system = platform.system()
+        try:
+            if system == "Darwin":       # macOS
+                subprocess.run(["open", base_dir])
+            elif system == "Windows":    # Windows
+                os.startfile(base_dir)
+            elif system == "Linux":      # Linux
+                subprocess.run(["xdg-open", base_dir])
+            else:
+                self.log(f"❌ Unsupported operating system: {system}")
+        except Exception as e:
+            self.log(f"❌ Could not open folder: {str(e)}")
 
     def start_download_thread(self):
         playlist_url = self.url_entry.get().strip()
