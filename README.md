@@ -1,149 +1,118 @@
-# YouTube Music Playlist Downloader
-
-![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
-![License](https://img.shields.io/badge/License-MIT-green)
-![FFmpeg](https://img.shields.io/badge/FFmpeg-Required-orange)
-![yt-dlp](https://img.shields.io/badge/yt--dlp-Required-red)
-
-A Python script to **download YouTube Music playlists** directly from a playlist link.
-
-* Downloads **high-quality MP3 audio**
-* Embeds **metadata** (artist, album, description)
-* Embeds **high-resolution album art**
-* **Skips already downloaded songs**
-* Shows **progress per song** and a **final summary**
-* Everything runs locally on your system, **no restrictions or accounts required**
+### YouTube Music Playlist Downloader (GUI Edition)
 
 ---
 
 ## Features
 
-* Clean filenames and folder structure
-* Supports **YouTube Music playlist URLs**
-* Handles songs with missing videos gracefully
-* Automatically organizes songs into playlist folders
+ Graphical User Interface (GUI) with real-time progress logs.
+ Square Album Art - Automatically converts YouTube's widescreen 16:9 video thumbnails into clean, centered 1:1 square artwork optimized for  music libraries and mobile apps.
+ Metadata & MP3 Conversion: Automatically extracts audio, embeds song titles, artist info, and thumbnail imagery using yt-dlp.
+ Smart Skipping Safely skips songs that have already been downloaded to avoid duplicates.
+ 
+---
+
+## Prerequisites
+
+Before running the application, make sure you have the following installed on your system:
+
+1. Python 3.x**
+2. FFmpeg (Required by `yt-dlp` to convert audio formats and crop thumbnails).
 
 ---
 
-## Requirements
+## Installation & Setup
 
-* Python 3.10+ (or compatible)
-* [yt-dlp](https://github.com/yt-dlp/yt-dlp)
-* [FFmpeg](https://ffmpeg.org/)
-* [ytmusicapi](https://github.com/sigma67/ytmusicapi)
-
----
-
-## Installation / Setup
-
-### MacOS Users 🍎
+# MacOS Users
 
 1. **Install Homebrew** (if not already installed):
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
+2. **Install system dependencies**:
+   brew install ffmpeg
 
-2. **Install dependencies**:
+3. **Clone the repository**:
+   git clone https://github.com/ColoradoCrusade/Youtube-music-downloader-GUI.git
+   cd Youtube-music-downloader-GUI
 
-```bash
-brew install ffmpeg yt-dlp
-```
-
-3. **Add yt-dlp to PATH** (if installed via pip):
-
-```bash
-nano ~/.zshrc
-# Add the line at the end:
-export PATH="$HOME/Library/Python/3.9/bin:$PATH"
-# Save and reload shell
-source ~/.zshrc
-```
-
-4. **Install ytmusicapi**:
-
-```bash
-brew install pipx
-pipx install ytmusicapi
-```
+4. **Install Python dependencies**:
+   python3 -m pip install --upgrade yt-dlp ytmusicapi
 
 ---
 
-### Windows Users 💻
+# Windows Users
 
-1. **Install Python 3.10+** from [python.org](https://www.python.org/downloads/windows/)
+1. **Install Python 3.10+** from python.org (Make sure to check "Add Python to PATH")
 
-2. **Install dependencies via pip**:
+2. **Install FFmpeg**:
+   * Download from the FFmpeg website or use winget:
+     winget install Gyan.FFmpeg
+   * Ensure `bin` folder is added to your System PATH. (Verify by running `ffmpeg -version` in PowerShell)
 
-```powershell
-pip install yt-dlp ytmusicapi
-```
+3. **Clone or download the repository**:
+   git clone https://github.com/ColoradoCrusade/Youtube-music-downloader-GUI.git
+   cd Youtube-music-downloader-GUI
 
-3. **Install FFmpeg**
-
-* Download from [FFmpeg website](https://ffmpeg.org/download.html)
-* Add `bin` folder to **System PATH**
-
-> Tip: Open PowerShell and run `ffmpeg -version` to verify installation
+4. **Install Python dependencies**:
+   python -m pip install --upgrade yt-dlp ytmusicapi
 
 ---
 
-### Linux Users 🐧
+# Linux Users
 
-1. **Install dependencies via package manager**:
+1. **Install system dependencies via package manager**:
 
-**Ubuntu/Debian:**
+   **Ubuntu/Debian:**
+   sudo apt update
+   sudo apt install ffmpeg python3-pip -y
 
-```bash
-sudo apt update
-sudo apt install ffmpeg python3-pip
-pip3 install --user yt-dlp ytmusicapi
-```
+   **Fedora/CentOS:**
+   sudo dnf install ffmpeg python3-pip -y
 
-**Fedora/CentOS:**
+2. **Clone the repository**:
+   git clone https://github.com/ColoradoCrusade/Youtube-music-downloader-GUI.git
+   cd Youtube-music-downloader-GUI
 
-```bash
-sudo dnf install ffmpeg python3-pip
-pip3 install --user yt-dlp ytmusicapi
-```
+3. **Install Python dependencies** (using a virtual environment to prevent package management errors):
+   python3 -m venv venv
+   source venv/bin/activate
+   pip install --upgrade yt-dlp ytmusicapi
 
-2. **Verify installation**:
+# Arch Linux (Alternative)
 
-```bash
-ffmpeg -version
-yt-dlp --version
-python3 -m pip show ytmusicapi
-```
+1. Install system dependencies via pacman:
+sudo pacman -S python python-pip ffmpeg git
+
+2. Clone your repository:
+git clone https://github.com/YOUR_USERNAME/Youtube-music-downloader.git
+
+3. Navigate into the project directory:
+cd Youtube-music-downloader
+
+4. Install or upgrade the required Python packages:
+pip install --upgrade yt-dlp ytmusicapi --user
+
+5. Run the script:
+python3 ytmusic_downloader.py
 
 ---
 
 ## Usage
 
-1. Create project folder and Python script:
+1. **Navigate to your project directory** (if not already there):
+   cd Youtube-music-downloader-GUI
 
-```bash
-mkdir ytmusic_downloader
-cd ytmusic_downloader
-nano ytmusic_downloader.py
-```
+2. **Launch the script**:
+   * **MacOS / Linux:**
+     python3 ytmusic_downloader.py
+   * **Windows:**
+     python ytmusic_downloader.py
 
-* Paste your final Python code into the file.
-* Save (`CTRL + O`) and exit (`CTRL + X`).
-
-2. Run the script with a playlist URL:
-
-```bash
-python3 ytmusic_downloader.py "<YouTube Music Playlist URL>"
-```
-
-Example:
-
-```bash
-python3 ytmusic_downloader.py "https://music.youtube.com/playlist?list=PLQNp-BCxMEnIeSoWfDbZXzJURVnItRyBz"
-```
-
-3. Songs will be saved in `DownloadedMusic` folder, organized by playlist.
-
+3. **Using the script**:
+   * Paste your YouTube Music Playlist URL into the input field at the top of the window.
+   * Click Start Download.
+   * Track real-time progress via the embedded log console. 
+   * Completed MP3s (featuring cropped 1:1 square album art) will be saved in a folder named `DownloadedMusic/[Playlist Name]/`.
+   
 ---
 
 ## Troubleshooting & Notes
@@ -154,6 +123,7 @@ python3 ytmusic_downloader.py "https://music.youtube.com/playlist?list=PLQNp-BCx
 * Already downloaded songs are skipped; deleted songs can be re-downloaded.
 * Script shows progress `[current / total]` for downloading, skipped, or missing songs.
 * High-resolution album art is embedded automatically.
+* Updating yt-dlp can fix unsupported format errors.
 * At the end, a summary is displayed with: total songs, downloaded this run, already in folder, skipped (no video found).
 
 ---
@@ -162,6 +132,3 @@ python3 ytmusic_downloader.py "https://music.youtube.com/playlist?list=PLQNp-BCx
 
 MIT License © Sumit Kumar
 
----
-
-If you have any issue or comments, please leave a comment in discussions section, I will try to resolve it as soon as possible.
