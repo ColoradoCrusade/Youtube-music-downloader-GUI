@@ -1,4 +1,4 @@
-### YouTube Music Playlist Downloader (GUI Edition)
+# YouTube Music Playlist Downloader (GUI Edition)
 
 ---
 
